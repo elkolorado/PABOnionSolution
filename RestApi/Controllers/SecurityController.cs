@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Core.Domain.Entities;
 using Core.Domain.Interfaces;
+using Core.Application.Models;
 
 namespace RestApi.Controllers
 {
@@ -27,7 +28,7 @@ namespace RestApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] User login)
+        public async Task<IActionResult> Authenticate([FromBody] LoginModel login)
         {
             var user = await _userService.Authenticate(login.Username, login.Password);
 
@@ -53,7 +54,7 @@ namespace RestApi.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new { Token = tokenString });
+            return Ok(new { Token = tokenString, Role = user.Role });
         }
     }
 }

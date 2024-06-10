@@ -1,0 +1,37 @@
+﻿@page
+@model RazorPages.Pages.Admin.Users.IndexModel
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h2>User Management</h2>
+<p>JWT Token: @ViewData["JwtToken"]</p>
+@if (Model.Users != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@user.Id">Edit</a> |
+                        <a asp-page-handler="Delete" asp-route-id="@user.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No users found.</p>
+}

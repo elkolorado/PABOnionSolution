@@ -2,11 +2,12 @@
 using Core.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace RestApi.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
@@ -17,6 +18,8 @@ namespace RestApi.Controllers
             _repository = repository;
         }
 
+        // Admin can view all users
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
@@ -24,6 +27,7 @@ namespace RestApi.Controllers
             return Ok(users);
         }
 
+        [Authorize(Roles = "User,Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
@@ -32,9 +36,21 @@ namespace RestApi.Controllers
             {
                 return NotFound();
             }
+
+            var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var currentUsername = User.Identity.Name;
+
+            if (currentUserRole == "User" && user.Username != currentUsername)
+            {
+                return Forbid();
+            }
+
+
             return Ok(user);
         }
 
+        // Admin can create users
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
@@ -42,10 +58,15 @@ namespace RestApi.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 
+        // User can update own profile, Admin can update any user
+        [Authorize(Roles = "User,Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, User user)
         {
-            if (id != user.Id)
+            var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var currentUsername = User.Identity.Name;
+
+            if (id != user.Id || (currentUserRole == "User" && user.Username != currentUsername))
             {
                 return BadRequest();
             }
@@ -53,6 +74,8 @@ namespace RestApi.Controllers
             return NoContent();
         }
 
+        // Admin can delete users
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

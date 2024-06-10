@@ -8,3 +8,24 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div id="chatMessages"></div>
+
+@section Scripts {
+    <script>
+        // Initialize gRPC client
+        var client = new ChatClient('https://localhost:5001');
+
+        // Subscribe to chat messages
+        var stream = client.joinChat();
+
+        stream.on('data', function (message) {
+            $('#chatMessages').append('<p>' + message.senderId + ': ' + message.message + '</p>');
+        });
+
+        // Handle errors
+        stream.on('error', function (err) {
+            console.error('Error:', err);
+        });
+    </script>
+}

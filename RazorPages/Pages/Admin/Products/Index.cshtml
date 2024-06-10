@@ -1,0 +1,32 @@
+﻿@page
+@model RazorPages.Pages.Admin.Products.ProductsModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Products</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                                <td>
+                    <a asp-page="./Edit" asp-route-id="@product.Id">Edit</a> |
+                    <a asp-page-handler="Delete" asp-route-id="@product.Id" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

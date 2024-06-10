@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package ChatService;
+
+service Chat {
+    rpc JoinChat(stream ChatMessage) returns (stream ChatMessage);
+}
+
+message ChatMessage {
+    string sender_id = 1;
+    string message = 2;
+}
