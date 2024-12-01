@@ -9,6 +9,10 @@ RUN dotnet restore RazorPages/RazorPages.csproj
 # Copy the rest of the code
 COPY . .
 
+# Rename or copy appsettings files to avoid conflict
+RUN cp /src/RazorPages/appsettings.json /src/RazorPages/appsettings.razorpages.json
+RUN cp /src/RazorPages/appsettings.Development.json /src/RazorPages/appsettings.Development.razorpages.json
+
 # Build and publish the app
 WORKDIR /src/RazorPages
 RUN dotnet publish -c Release -o /app/razorpages

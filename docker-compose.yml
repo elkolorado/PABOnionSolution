@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Razor Pages Service
   razorpages:
     build:
       context: .
@@ -10,8 +9,10 @@ services:
       - "5000:5000"
     networks:
       - my-network
+    volumes:
+      - ./RazorPages/appsettings.json:/app/appsettings.json
+      - ./RazorPages/appsettings.Development.json:/app/appsettings.Development.json
 
-  # REST API Service
   restapi:
     build:
       context: .
@@ -20,6 +21,9 @@ services:
       - "5046:5046"
     networks:
       - my-network
+    volumes:
+      - ./RestApi/appsettings.json:/app/appsettings.json
+      - ./RestApi/appsettings.Development.json:/app/appsettings.Development.json
 
 networks:
   my-network:

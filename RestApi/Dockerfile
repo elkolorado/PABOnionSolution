@@ -9,6 +9,10 @@ RUN dotnet restore RestApi/RestApi.csproj
 # Copy the rest of the code
 COPY . .
 
+# Rename or copy appsettings files to avoid conflict
+RUN cp /src/RestApi/appsettings.json /src/RestApi/appsettings.restapi.json
+RUN cp /src/RestApi/appsettings.Development.json /src/RestApi/appsettings.Development.restapi.json
+
 # Build and publish the app
 WORKDIR /src/RestApi
 RUN dotnet publish -c Release -o /app/restapi
