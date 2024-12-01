@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Razor Pages Service
+  razorpages:
+    build:
+      context: .
+      dockerfile: RazorPages/Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - my-network
+
+  # REST API Service
+  restapi:
+    build:
+      context: .
+      dockerfile: RestApi/Dockerfile
+    ports:
+      - "5046:5046"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
