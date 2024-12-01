@@ -11,11 +11,11 @@ COPY . .
 
 # Build and publish the app
 WORKDIR /src/RestApi
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app/restapi
 
 # Set the base image for runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=build /app/restapi /app
 EXPOSE 5046
 ENTRYPOINT ["dotnet", "RestApi.dll"]

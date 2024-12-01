@@ -11,11 +11,11 @@ COPY . .
 
 # Build and publish the app
 WORKDIR /src/RazorPages
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app/razorpages
 
 # Set the base image for runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=build /app/razorpages /app
 EXPOSE 5000
 ENTRYPOINT ["dotnet", "RazorPages.dll"]
