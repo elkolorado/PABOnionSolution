@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorPages", "RazorPages\RazorPages.csproj", "{F3D32E89-E9E7-45B8-8A30-ADBC811477DE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A007FFA4-2FFF-4BE2-AE59-2BFA9F089335} = {A007FFA4-2FFF-4BE2-AE59-2BFA9F089335}
+		{D48D86AF-D763-49A5-9BDE-BF9DE4827C1E} = {D48D86AF-D763-49A5-9BDE-BF9DE4827C1E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoapService", "SoapService\SoapService.csproj", "{109F0EF5-6ECD-4286-9785-E2C671C29662}"
 EndProject
