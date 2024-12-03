@@ -1,30 +1,21 @@
-version: '3.8'
+version: '3.4'
 
 services:
   razorpages:
+    image: ${DOCKER_REGISTRY-}razorpages
     build:
       context: .
       dockerfile: RazorPages/Dockerfile
-    ports:
-      - "5000:5000"
-    networks:
-      - my-network
-    volumes:
-      - ./RazorPages/appsettings.json:/app/appsettings.json
-      - ./RazorPages/appsettings.Development.json:/app/appsettings.Development.json
+    networks: 
+    - my-network
 
   restapi:
+    image: ${DOCKER_REGISTRY-}restapi
     build:
       context: .
       dockerfile: RestApi/Dockerfile
-    ports:
-      - "5046:5046"
-    networks:
-      - my-network
-    volumes:
-      - ./RestApi/appsettings.json:/app/appsettings.json
-      - ./RestApi/appsettings.Development.json:/app/appsettings.Development.json
+    networks: 
+    - my-network
 
 networks:
   my-network:
-    driver: bridge
