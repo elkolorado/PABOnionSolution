@@ -15,13 +15,13 @@ COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 RUN dotnet restore "./RestApi/./RestApi.csproj"
 COPY . .
 WORKDIR "/src/RestApi"
-RUN dotnet build "./RestApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./RestApi.csproj" -c $BUILD_CONFIGURATION -o /app/build/RestApi
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./RestApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./RestApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish/RestApi /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish/RestApi .
 ENTRYPOINT ["dotnet", "RestApi.dll"]

@@ -17,13 +17,13 @@ COPY ["SoapService/SoapService.csproj", "SoapService/"]
 RUN dotnet restore "./RazorPages/./RazorPages.csproj"
 COPY . .
 WORKDIR "/src/RazorPages"
-RUN dotnet build "./RazorPages.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./RazorPages.csproj" -c $BUILD_CONFIGURATION -o /app/build/RazorPages
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./RazorPages.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./RazorPages.csproj" -c $BUILD_CONFIGURATION -o /app/publish/RazorPages /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish/RazorPages .
 ENTRYPOINT ["dotnet", "RazorPages.dll"]
