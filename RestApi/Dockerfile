@@ -8,6 +8,7 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+RUN dotnet dev-certs https
 WORKDIR /src
 COPY ["RestApi/RestApi.csproj", "RestApi/"]
 COPY ["Core/Core.csproj", "Core/"]
@@ -23,5 +24,6 @@ RUN dotnet publish "./RestApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish/Re
 
 FROM base AS final
 WORKDIR /app
+COPY --from=publish /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.dotnet/corefx/cryptography/x509stores/my/
 COPY --from=publish /app/publish/RestApi .
 ENTRYPOINT ["dotnet", "RestApi.dll"]
