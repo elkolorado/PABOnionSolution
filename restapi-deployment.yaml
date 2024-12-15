@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restapi-app
+spec:
+  replicas: 2  # Scale as needed
+  selector:
+    matchLabels:
+      app: restapi-app
+  template:
+    metadata:
+      labels:
+        app: restapi-app
+    spec:
+      containers:
+        - name: restapi-app
+          image: ${DOCKER_REGISTRY-}restapi
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080  # Expose port 8080
+            - containerPort: 8081  # Expose port 8081 if needed
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"  # Adjust environment if needed
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restapi-service
+spec:
+  selector:
+    app: restapi-app
+  ports:
+    - port: 8080
+      targetPort: 8080  # Expose port 8080 externally
+    - port: 8081
+      targetPort: 8081  # Expose port 8081 if necessary
+  type: NodePort  # Use NodePort for external access (or ClusterIP for internal use)

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: razorpages-app
+spec:
+  replicas: 2  # You can scale as needed
+  selector:
+    matchLabels:
+      app: razorpages-app
+  template:
+    metadata:
+      labels:
+        app: razorpages-app
+    spec:
+      containers:
+        - name: razorpages-app
+          image: ${DOCKER_REGISTRY-}razorpages
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080  # Expose port 8080 as defined in Dockerfile
+            - containerPort: 8081  # Expose port 8081 if needed
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"  # Adjust if needed for your environment
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: razorpages-service
+spec:
+  selector:
+    app: razorpages-app
+  ports:
+    - port: 80
+      targetPort: 8080  # Expose port 8080 externally
+    - port: 81
+      targetPort: 8081  # Expose port 8081 if necessary
+  type: NodePort  # Use NodePort for external access (or ClusterIP for internal use)
