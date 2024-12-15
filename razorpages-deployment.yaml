@@ -14,11 +14,10 @@ spec:
     spec:
       containers:
         - name: razorpages-app
-          image: ${DOCKER_REGISTRY-}razorpages
+          image: razorpages:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080  # Expose port 8080 as defined in Dockerfile
-            - containerPort: 8081  # Expose port 8081 if needed
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"  # Adjust if needed for your environment
@@ -33,6 +32,4 @@ spec:
   ports:
     - port: 80
       targetPort: 8080  # Expose port 8080 externally
-    - port: 81
-      targetPort: 8081  # Expose port 8081 if necessary
   type: NodePort  # Use NodePort for external access (or ClusterIP for internal use)
